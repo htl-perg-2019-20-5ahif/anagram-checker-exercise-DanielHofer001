@@ -7,6 +7,6 @@ namespace AnagramChecker_lib
     public interface IAnagramChecker
     {
         bool IsAnagram(string word1, string word2);
-        IEnumerable<string> GetKnownAnagrams(string word, IEnumerable<Anagram> anagramWords);
+        IEnumerable<string> GetKnownAnagrams(string word, string anagramWords);
     }
 }

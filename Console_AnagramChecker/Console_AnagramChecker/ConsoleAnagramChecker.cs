@@ -1,4 +1,6 @@
 ﻿using AnagramChecker_lib;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,11 +11,14 @@ namespace Console_AnagramChecker
     {
         private readonly IAnagramChecker checker;
         private readonly IAnagramReader reader;
-        public ConsoleAnagramChecker(IAnagramChecker checker, IAnagramReader reader)
+
+        public ConsoleAnagramChecker(IAnagramChecker checker, IConfiguration config)
+
         {
             this.checker = checker;
-            this.reader = reader;
+            this.reader = new AnagramFileReader(null, config);
         }
+
         public async void AnagramCheck(string[] args)
         {
             if (args.Length <= 3 && args.Length >= 2)
@@ -28,19 +33,10 @@ namespace Console_AnagramChecker
                 }
                 else if (args[0] == "getKnown" && args.Length == 2)
                 {
+
                     string anagramText = await reader.ReadAnagramFile();
 
-                    var anagramWords = anagramText.Replace("\r", "").Split("\n");
-                    List<Anagram> anagramList = new List<Anagram>();
-
-                    foreach (var s in anagramWords)
-                    {
-                        var splitted = s.Replace(" ", "").Split('=');
-                        anagramList.Add(new Anagram(splitted[0], splitted[1]));
-                    }
-                    Console.WriteLine("size" + anagramList.Count);
-
-                    foreach (var s in checker.GetKnownAnagrams(args[1], anagramList))
+                    foreach (var s in checker.GetKnownAnagrams(args[1], anagramText))
                     {
                         Console.WriteLine(s);
                     }

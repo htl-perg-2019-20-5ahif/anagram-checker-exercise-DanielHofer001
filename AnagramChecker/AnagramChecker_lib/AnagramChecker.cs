@@ -8,8 +8,9 @@ namespace AnagramChecker_lib
     public class AnagramChecker : IAnagramChecker
 
     {
-        public IEnumerable<string> GetKnownAnagrams(string word, IEnumerable<Anagram> anagramWords)
+        public IEnumerable<string> GetKnownAnagrams(string word, string anagramText)
         {
+            IEnumerable<Anagram> anagramWords = parseText(anagramText);
             var anagrams = new List<string>();
             foreach (var anagram in anagramWords)
             {
@@ -25,6 +26,19 @@ namespace AnagramChecker_lib
                 }
             }
             return anagrams;
+        }
+
+        private IEnumerable<Anagram> parseText(string anagramText)
+        {
+            var anagramWords = anagramText.Replace("\r", "").Split("\n");
+            List<Anagram> anagramList = new List<Anagram>();
+
+            foreach (var s in anagramWords)
+            {
+                var splitted = s.Replace(" ", "").Split("=");
+                anagramList.Add(new Anagram(splitted[0], splitted[1]));
+            }
+            return anagramList;
         }
 
         public bool IsAnagram(string word1, string word2)

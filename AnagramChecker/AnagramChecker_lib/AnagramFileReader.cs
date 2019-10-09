@@ -13,13 +13,14 @@ namespace AnagramChecker_lib
         private readonly ILogger<AnagramFileReader> logger;
         private readonly IConfiguration config;
 
+
         // IMPORTANT - WITHOUT CONSTRUCTOR --> NULLREFERENCE
         public AnagramFileReader(ILogger<AnagramFileReader> logger, IConfiguration config)
         {
             this.logger = logger;
             this.config = config;
         }
-
+    
         public async Task<string> ReadAnagramFile()
         {
             string anagramText;
@@ -31,6 +32,7 @@ namespace AnagramChecker_lib
             }
             catch (FileNotFoundException ex)
             {
+                if(logger!=null)
                 logger.LogError(ex, "AnagramFile not found");
                 throw;
             }

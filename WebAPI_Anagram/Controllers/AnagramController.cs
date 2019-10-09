@@ -34,7 +34,7 @@ namespace WebAPI_Anagram.Controllers
         [HttpGet]
         [Route("getKnownAnagrams")]
 
-        public async Task<IEnumerable<string>> GetKnownAnagrams([FromQuery] string w)
+        public async Task <IActionResult> GetKnownAnagrams([FromQuery] string w)
         {
             string anagramText = await reader.ReadAnagramFile();
             var anagramWords = anagramText.Replace("\r", "").Split("\n");
@@ -44,8 +44,14 @@ namespace WebAPI_Anagram.Controllers
             {
                 var splitted = s.Replace(" ","").Split("=");
                 anagramList.Add(new Anagram(splitted[0], splitted[1]));
-            }            
-            return checker.GetKnownAnagrams(w, anagramList);
+            }
+            var res = checker.GetKnownAnagrams(w, anagramText);
+            if (res.Count() >0 )
+            {
+                return Ok(res);
+            }
+            return NotFound();
+            
         }
         [HttpGet]
         [Route("getPermutations")]
